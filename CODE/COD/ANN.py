@@ -14,17 +14,21 @@ def binary_crossentropy(y_true, y_pred):
     # Calculate binary cross-entropy
     return -numpy.mean(y_true * numpy.log(y_pred) + (1 - y_true) * numpy.log(1 - y_pred))
 
-def predict_outputs(weights_mat, data_inputs, data_outputs, activation="relu"):
+def predict_outputs(weights_mat:dict, data_inputs, data_outputs, activation = "relu"):
+    threshold = 0.5
     predictions = numpy.zeros(shape=(data_inputs.shape[0]))
     for sample_idx in range(data_inputs.shape[0]):
         r1 = data_inputs[sample_idx, :]
-        for curr_weights in weights_mat:
+        for layer_key, curr_weights in weights_mat.items():
             r1 = numpy.matmul(r1, curr_weights)
-            if activation == "relu":
-                r1 = relu(r1)
-            elif activation == "sigmoid":
+            if layer_key != "output_layer":
+                if activation == "relu":
+                    r1 = relu(r1)
+                elif activation == "sigmoid":
+                    r1 = sigmoid(r1)
+            else:
                 r1 = sigmoid(r1)
-        predicted_label = numpy.where(r1 == numpy.max(r1))[0][0]
+        predicted_label = 0 if r1 < threshold else 1
         predictions[sample_idx] = predicted_label
     correct_predictions = numpy.where(predictions == data_outputs)[0].size
     accuracy = (correct_predictions/data_outputs.size)*100
@@ -32,9 +36,9 @@ def predict_outputs(weights_mat, data_inputs, data_outputs, activation="relu"):
     return loss, accuracy, predictions
     
 def fitness(weights_mat, data_inputs, data_outputs, activation="relu"):
-    accuracy = numpy.empty(shape=(weights_mat.shape[0]))
-    losses = numpy.empty(shape=(weights_mat.shape[0]))
-    for sol_idx in range(weights_mat.shape[0]):
-        curr_sol_mat = weights_mat[sol_idx, :]
+    accuracy = numpy.empty(shape = len(weights_mat))
+    losses = numpy.empty(shape = len(weights_mat))
+    for sol_idx in range(len(weights_mat)):
+        curr_sol_mat = weights_mat[sol_idx]
         losses[sol_idx], accuracy[sol_idx], _ = predict_outputs(curr_sol_mat, data_inputs, data_outputs, activation=activation)
-    return accuracy
+    return losses, accuracy

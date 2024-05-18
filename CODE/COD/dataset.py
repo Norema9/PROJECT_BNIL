@@ -14,8 +14,8 @@ def create_dataset(data_directory):
 
     Y_encoded_df = label_encoder.fit_transform(Y_df)
 
-    X_train, Y_train, X_test, Y_test = train_test_split(X_df, Y_encoded_df, test_size = 0.2, random_state = SEED)
+    X_train, X_test, Y_train, Y_test = train_test_split(X_df, Y_encoded_df, test_size = 0.2, random_state = SEED)
 
-    return X_train, Y_train, X_test, Y_test, label_encoder
+    return np.array(X_train), np.array(X_test), np.array(Y_train), np.array(Y_test), label_encoder
 
 

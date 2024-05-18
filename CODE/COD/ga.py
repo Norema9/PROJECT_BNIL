@@ -2,29 +2,30 @@ import numpy
 import random
 
 # Converting each solution from matrix to vector.
-def mat_to_vector(mat_pop_weights):
+def mat_to_vector(mat_pop_weights:list[dict]):
     pop_weights_vector = []
-    for sol_idx in range(mat_pop_weights.shape[0]):
+    for sol_idx in range(len(mat_pop_weights)):
         curr_vector = []
-        for layer_idx in range(mat_pop_weights.shape[1]):
-            vector_weights = numpy.reshape(mat_pop_weights[sol_idx, layer_idx], newshape=(mat_pop_weights[sol_idx, layer_idx].size))
+        for layer_key, layer in mat_pop_weights[sol_idx].items():
+            vector_weights = numpy.reshape(layer, newshape = layer.size)
             curr_vector.extend(vector_weights)
         pop_weights_vector.append(curr_vector)
     return numpy.array(pop_weights_vector)
 
 # Converting each solution from vector to matrix.
-def vector_to_mat(vector_pop_weights, mat_pop_weights):
+def vector_to_mat(vector_pop_weights, mat_pop_weights:list[dict]):
     mat_weights = []
-    for sol_idx in range(mat_pop_weights.shape[0]):
+    for sol_idx in range(len(mat_pop_weights)):
         start = 0
         end = 0
-        for layer_idx in range(mat_pop_weights.shape[1]):
-            end = end + mat_pop_weights[sol_idx, layer_idx].size
+        mat_layer_weights = {}
+        for layer_key, layer in mat_pop_weights[sol_idx].items():
+            end = end + layer.size
             curr_vector = vector_pop_weights[sol_idx, start:end]
-            mat_layer_weights = numpy.reshape(curr_vector, newshape=(mat_pop_weights[sol_idx, layer_idx].shape))
-            mat_weights.append(mat_layer_weights)
+            mat_layer_weights[layer_key] = numpy.reshape(curr_vector, newshape = (layer.shape))
             start = end
-    return numpy.reshape(mat_weights, newshape=mat_pop_weights.shape)
+        mat_weights.append(mat_layer_weights)
+    return mat_weights
 
 def select_mating_pool(pop, fitness, num_parents):
     # Selecting the best individuals in the current generation as parents for producing the offspring of the next generation.
@@ -52,7 +53,8 @@ def crossover(parents, offspring_size):
         offspring[k, crossover_point:] = parents[parent2_idx, crossover_point:]
     return offspring
 
-def mutation(offspring_crossover, mutation_percent):
+def mutation(offspring_crossover, mutation_percent, seed = 42):
+    numpy.random.seed(seed)
     num_mutations = numpy.uint32((mutation_percent*offspring_crossover.shape[1])/100)
     mutation_indices = numpy.array(random.sample(range(0, offspring_crossover.shape[1]), num_mutations))
     # Mutation changes a single gene in each offspring randomly.
