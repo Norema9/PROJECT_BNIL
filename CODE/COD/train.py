@@ -9,10 +9,9 @@ import pickle
 from dataset import create_dataset
 import json
 
-NUM_NEURON_1 = 12
-NUM_NEURON_2 = 6
-# NUM_NEURON_3 = 6
-NUM_GENERATION = 5000
+NUM_NEURON_1 = 12 # 8
+NUM_NEURON_2 = 6 # 4
+NUM_GENERATION = 5000 # 1000
 MUTATION_PERCENT = 10
 NUM_PARENT_MATING = 4
 SOL_PER_POP = 16
