@@ -1,7 +1,11 @@
 import numpy
 import random
 
-# Converting each solution from matrix to vector.
+""" This code is un update of the code found here:
+         ref: https://github.com/ahmedfgad/NeuralGenetic/blob/master/Tutorial%20Project/ga.py
+"""
+
+# Converting each solution from matrices to vector.
 def mat_to_vector(mat_pop_weights:list[dict]):
     pop_weights_vector = []
     for sol_idx in range(len(mat_pop_weights)):
@@ -12,7 +16,7 @@ def mat_to_vector(mat_pop_weights:list[dict]):
         pop_weights_vector.append(curr_vector)
     return numpy.array(pop_weights_vector)
 
-# Converting each solution from vector to matrix.
+# Converting each solution from vector to matrices.
 def vector_to_mat(vector_pop_weights, mat_pop_weights:list[dict]):
     mat_weights = []
     for sol_idx in range(len(mat_pop_weights)):

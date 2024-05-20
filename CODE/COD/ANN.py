@@ -1,5 +1,11 @@
 import numpy
 
+""" This code is un update of the code found here:
+         ref: https://github.com/ahmedfgad/NeuralGenetic/blob/master/Tutorial%20Project/ANN.py
+"""
+
+
+
 def sigmoid(inpt):
     return 1.0/(1.0+numpy.exp(-1*inpt))
 

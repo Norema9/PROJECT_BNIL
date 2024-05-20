@@ -1,0 +1,11 @@
+{
+    "NUM_NEURON_1": 12,
+    "NUM_NEURON_2": 6,
+    "NUM_GENERATION": 500,
+    "MUTATION_PERCENT": 10,
+    "NUM_PARENT_MATING": 4,
+    "SOL_PER_POP": 8,
+    "SEED": 42,
+    "ACTIVATION": "sigmoid",
+    "EVAL_STEP": 10
+}

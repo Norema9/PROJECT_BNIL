@@ -9,10 +9,10 @@ import pickle
 from dataset import create_dataset
 import json
 
-NUM_NEURON_1 = 12 # 8
-NUM_NEURON_2 = 6 # 4
-NUM_GENERATION = 5000 # 1000
-MUTATION_PERCENT = 10
+NUM_NEURON_1 = 12
+NUM_NEURON_2 = 6
+NUM_GENERATION = 500
+MUTATION_PERCENT = 25
 NUM_PARENT_MATING = 4
 SOL_PER_POP = 16
 SEED = 42
@@ -23,8 +23,8 @@ CHECKPOINT_PATH = None
 def main(data_directory):
     data_train_inputs, data_test_inputs, data_train_outputs, data_test_outputs, label_encoder = create_dataset(data_directory)
     input_dim = data_train_inputs.shape[1]
-    os.makedirs(os.path.join("MODELS", "accuracy_plot_"+str(NUM_GENERATION)+"__iterations_" + ACTIVATION + "_activation__" +str(MUTATION_PERCENT)+"%_mutation"), exist_ok = True)
-    save_dir = os.path.join("MODELS", "accuracy_plot_"+str(NUM_GENERATION)+"__iterations_" + ACTIVATION + "_activation__" +str(MUTATION_PERCENT)+"%_mutation")
+    os.makedirs(os.path.join("MODELS_GA", str(NUM_GENERATION)+"__iterations_" + ACTIVATION + "_4_activation__" +str(MUTATION_PERCENT)+"%_mutation"), exist_ok = True)
+    save_dir = os.path.join("MODELS_GA", str(NUM_GENERATION)+"__iterations_" + ACTIVATION + "_4_activation__" +str(MUTATION_PERCENT)+"%_mutation")
     # sys.exit()
     ga_trainer = GA_FFNN_TRAINER(input_dim, NUM_NEURON_1, NUM_NEURON_2, NUM_GENERATION, MUTATION_PERCENT, NUM_PARENT_MATING, SOL_PER_POP, SEED, save_dir, EVAL_STEP, activation = ACTIVATION)
     ga_trainer.initiate_population()
@@ -66,6 +66,26 @@ def main(data_directory):
     result = {"loss": loss[-1], "accuracy": accuracies[-1], "duration": duration}
     with open(os.path.join(save_dir, 'results.json'), 'w') as f_result:
         json.dump(result, f_result)
+
+    # Configuration dictionary
+    config = {
+        "NUM_NEURON_1": NUM_NEURON_1,
+        "NUM_NEURON_2": NUM_NEURON_2,
+        "NUM_GENERATION": NUM_GENERATION,
+        "MUTATION_PERCENT": MUTATION_PERCENT,
+        "NUM_PARENT_MATING": NUM_PARENT_MATING,
+        "SOL_PER_POP": SOL_PER_POP,
+        "SEED": SEED,
+        "ACTIVATION": ACTIVATION,
+        "EVAL_STEP": EVAL_STEP
+    }
+
+    # Save configuration to JSON file
+    config_filename = os.path.join(save_dir, "config.json")
+    os.makedirs(save_dir, exist_ok=True)
+
+    with open(config_filename, 'w') as config_file:
+        json.dump(config, config_file, indent=4)
 
 
 if __name__ == "__main__":

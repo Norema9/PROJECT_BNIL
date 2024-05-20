@@ -1,2 +1,10 @@
-/Z.DOCUMENTS
-/MODEL
+Z.DOCUMENTS\A-schematic-overview-of-matrix-multiply-logic-in-neural-network-accelerator-hardw.png
+Z.DOCUMENTS\Access-Template.docx
+Z.DOCUMENTS\BINL_Report_Template.pptx
+Z.DOCUMENTS\Flatten-matrices-by-depth.png
+Z.DOCUMENTS\p1.png
+Z.DOCUMENTS\RESULTS.xlsx
+.gitignore
+*.gz
+*.tar
+*.out
